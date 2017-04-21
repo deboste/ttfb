@@ -8,7 +8,7 @@ $( document ).ready(function() {
             { "data": "dns" },
             { "data": "ttl" }
         ],
-        paging: false,
+        paging: true,
         order: [[ 2, "asc" ]],
         colReorder: true,
         //responsive: true,
