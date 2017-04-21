@@ -3,13 +3,13 @@ $( document ).ready(function() {
         columns: [
             { "data": "ndd" },
             { "data": "url" },
-            { "data": "nl" },
             { "data": "ttfb" },
             { "data": "host" },
             { "data": "dns" },
             { "data": "ttl" }
         ],
         paging: false,
+        order: [[ 2, "asc" ]],
         colReorder: true,
         //responsive: true,
         dom: 'Bfrtip',
@@ -22,11 +22,25 @@ $( document ).ready(function() {
     } );
 });
 
+$(document).ajaxStart(function () {
+    $("#check").prop('disabled', true);
+    $("#ndd").prop('disabled', true);
+    $('#table_results').spin('large', '#000000');
+});
+
+$(document).ajaxStop(function () {
+    $("#check").prop('disabled', false);
+    $("#ndd").prop('disabled', false);
+    $('#table_results').spin(false);
+});
+
+$("#reset").click(function(){
+    $("#ndd").val("");
+    table.clear().draw();
+});
+
 $("#check").click(function(){
     if ($.trim($("#ndd").val())) {
-        $(this).prop('disabled', true);
-        $("#ndd").prop('disabled', true);
-        $(this).spin('large', '#000000');
         table.clear().draw();
 
         var arrayOfLines = $('#ndd').val().split('\n');
@@ -43,8 +57,5 @@ $("#check").click(function(){
                 }
             });
         });
-        $("#check").spin(false);
-        $("#check").prop('disabled', false);
-        $("#ndd").prop('disabled', false);
     }
 });

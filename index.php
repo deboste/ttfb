@@ -22,13 +22,13 @@
         <textarea class="form-control" rows="5" id="ndd" name="ndd" required="required"></textarea>
     </div>
     <button type="button" class="btn btn-primary" id="check" name="check">Check</button>
+    <button type="button" class="btn btn-warning" id="reset" name="reset">Reset</button>
     <br><br>
     <table id="table_results">
         <thead>
         <tr>
             <th>ndd</th>
             <th>url</th>
-            <th>nl</th>
             <th>ttfb</th>
             <th>host</th>
             <th>dns</th>

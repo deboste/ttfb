@@ -3,6 +3,8 @@ if(isset($_GET['url'])) {
     $url = $_GET['url'];
     $url = preg_replace('/\s+/', '', $url);
     $results = array();
+
+    #CURL : URL finale et TTFB
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_RETURNTRANSFER => 1,
@@ -17,7 +19,9 @@ if(isset($_GET['url'])) {
     if(curl_exec($curl) !== false) {
         $info = curl_getinfo($curl);
     }
+    curl_close($curl);
 
+    #TTFB
     $ttfb = "-";
     if (!empty($info["starttransfer_time"])) {
         if ($info["starttransfer_time"] > 0.050 ) {
@@ -29,16 +33,52 @@ if(isset($_GET['url'])) {
         }
     }
 
+    #HOST
+    $reverse_host = gethostbyaddr(gethostbyname($url));
+    $host = "<span class=\"label label-danger\">Autre</span>";
+    if (preg_match('/clara.net|artful.net/', $reverse_host)) {
+        $host = "<span class=\"label label-success\">Claranet</span>";
+    } elseif (preg_match('/typhon.net/', $reverse_host)) {
+        $host = "<span class=\"label label-success\">Typhon</span>";
+    }
+
+    #NameServer et TimeToLive
+    $authns_array = dns_get_record($url, DNS_A + DNS_NS);
+    if(empty($authns_array)) {
+        $url = parse_url($url, PHP_URL_HOST);
+        $authns_array = dns_get_record($url, DNS_A + DNS_NS);
+    }
+
+    #NS
+    $nstargets = array_column($authns_array, 'target');
+    $authnsndd = array("ns0.de.clara.net", "ns1.de.clara.net", "ns1.artful.net", "ns2.artful.net", "ns3.artful.net", "ns1.fr.claradns.net", "ns2.fr.claradns.net", "ns3.fr.claradns.net", "ns1.typhon.net", "ns2.typhon.net");
+    $dns = "<span class=\"label label-warning\">Autre</span>";
+    if (count(array_intersect($nstargets, $authnsndd)) > 0){
+        $dns = "<span class=\"label label-success\">Claranet</span>";
+    }
+
+    #TTL
+    $nsttl = array_column($authns_array, 'ttl');
+    $ttl = "-";
+    if(!empty($nsttl[0])) {
+        if ($nsttl[0] < 1800 ) {
+            $ttl = "<span class=\"label label-danger\">" . $nsttl[0] . "</span>";
+        } elseif ($info["starttransfer_time"] < 3600 ) {
+            $ttl = "<span class=\"label label-warning\">" . $nsttl[0] . "</span>";
+        } elseif ($info["starttransfer_time"] >= 3600 ) {
+            $ttl = "<span class=\"label label-success\">" . $nsttl[0] . "</span>";
+        }
+    }
+
+    #Resultats en JSON
     $results = array(
         "ndd" => "<span class=\"label label-info\">" . $url . "</span>",
         "url" => (empty($info["url"])) ? "<span class=\"label label-danger\">Error : " . curl_errno($curl) . " - " . curl_strerror(curl_errno($curl)) . "</span>" : "<a href=\"" . $info["url"] . "\" target=\"_blank\">" . $info["url"]  . "</a>",
-        "nl" => (empty($info["namelookup_time"])) ? "-" : $info["namelookup_time"],
         "ttfb" => $ttfb,
-        "host" => "-",
-        "dns" => "-",
-        "ttl" => "-"
+        "host" => $host,
+        "dns" => $dns,
+        "ttl" => $ttl
     );
-    curl_close($curl);
 
     header('Content-type: application/json');
     echo json_encode($results);
