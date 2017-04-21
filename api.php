@@ -25,11 +25,11 @@ if(isset($_GET['url'])) {
     $ttfb = "-";
     if (!empty($info["starttransfer_time"])) {
         if ($info["starttransfer_time"] > 0.050 ) {
-            $ttfb = "<span class=\"label label-danger\">" . $info["starttransfer_time"] . "</span>";
+            $ttfb = "<span class=\"label label-danger\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
         } elseif ($info["starttransfer_time"] > 0.020 ) {
-            $ttfb = "<span class=\"label label-warning\">" . $info["starttransfer_time"] . "</span>";
+            $ttfb = "<span class=\"label label-warning\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
         } elseif ($info["starttransfer_time"] > 0.000 ) {
-            $ttfb = "<span class=\"label label-success\">" . $info["starttransfer_time"] . "</span>";
+            $ttfb = "<span class=\"label label-success\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
         }
     }
 
@@ -42,17 +42,17 @@ if(isset($_GET['url'])) {
     $authnsndd = array("ns1.as44099.net", "ns2.as44099.net", "ns0.de.clara.net", "ns1.de.clara.net", "ns1.artful.net", "ns2.artful.net", "ns3.artful.net", "ns1.fr.claradns.net", "ns2.fr.claradns.net", "ns3.fr.claradns.net", "ns1.typhon.net", "ns2.typhon.net");
     $dns = "-";
     if(!empty($nstargets)) {
-        $dns = "<span class=\"label label-warning\">Autre</span>";
+        $dns = "<span class=\"label label-warning\" title=\"" . implode(", ", $nstargets) . "\">Autre</span>";
         if (count(array_intersect($nstargets, $authnsndd)) > 0){
-            $dns = "<span class=\"label label-success\">Claranet</span>";
+            $dns = "<span class=\"label label-success\" title=\"" . implode(", ", $nstargets) . "\">Claranet</span>";
         }
     } else {
         $authns_array = dns_get_record($_GET['url'], DNS_NS);
         $nstargets = array_column($authns_array, 'target');
         if(!empty($nstargets)) {
-            $dns = "<span class=\"label label-warning\">Autre</span>";
+            $dns = "<span class=\"label label-warning\" title=\"" . implode(", ", $nstargets) . "\">Autre</span>";
             if (count(array_intersect($nstargets, $authnsndd)) > 0) {
-                $dns = "<span class=\"label label-success\">Claranet</span>";
+                $dns = "<span class=\"label label-success\" title=\"" . implode(", ", $nstargets) . "\">Claranet</span>";
             }
         }
     }
@@ -72,13 +72,13 @@ if(isset($_GET['url'])) {
 
     #HOST
     $reverse_host = gethostbyaddr(gethostbyname($url));
-    $host = "<span class=\"label label-danger\">Autre</span>";
+    $host = "<span class=\"label label-danger\" title=\"$reverse_host\">Autre</span>";
     if (preg_match('/clara.net|artful.net/', $reverse_host)) {
-        $host = "<span class=\"label label-success\">Claranet</span>";
+        $host = "<span class=\"label label-success\" title=\"$reverse_host\">Claranet</span>";
     } elseif (preg_match('/typhon.net/', $reverse_host)) {
-        $host = "<span class=\"label label-success\">Typhon</span>";
+        $host = "<span class=\"label label-success\" title=\"$reverse_host\">Typhon</span>";
     } elseif (preg_match('/as44099.net/', $reverse_host)) {
-        $host = "<span class=\"label label-success\">Runiso</span>";
+        $host = "<span class=\"label label-success\" title=\"$reverse_host\">Runiso</span>";
     }
 
     #Resultats en JSON
