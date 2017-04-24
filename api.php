@@ -33,6 +33,10 @@ if(isset($_GET['url'])) {
         }
     }
 
+    #NS / TTL
+    $output = shell_exec('script.sh $1');
+    echo "<pre>$output</pre>";
+
     #NameServer et TimeToLive
     $url = (empty($info["url"])) ? $url : parse_url($info["url"], PHP_URL_HOST);
     $authns_array = dns_get_record($url, DNS_A + DNS_NS);
