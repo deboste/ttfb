@@ -37,8 +37,8 @@ if(isset($_GET['url'])) {
 
     #NS / TTL
     $output = shell_exec("/var/www/ttfb/script.sh $url");
-    $output = strtok($output, "\n");
-    $nsttl=explode(":", $string);
+    $firstline = strtok($output, "\n");
+    $nsttl=explode(":", $firstline);
 
     #NS
     $authnsndd = array("as44099", "clara", "artful", "claradns", "claradns", "typhon");
@@ -56,9 +56,9 @@ if(isset($_GET['url'])) {
     if(!empty($nsttl)) {
         if ($nsttl[1] < 1800 ) {
             $ttl = "<span class=\"label label-danger\">" . $nsttl[1] . "</span>";
-        } elseif ($info["starttransfer_time"] < 3600 ) {
+        } elseif ($nsttl[1] < 3600 ) {
             $ttl = "<span class=\"label label-warning\">" . $nsttl[1] . "</span>";
-        } elseif ($info["starttransfer_time"] >= 3600 ) {
+        } elseif ($nsttl[1] >= 3600 ) {
             $ttl = "<span class=\"label label-success\">" . $nsttl[1] . "</span>";
         }
     }
