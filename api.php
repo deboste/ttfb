@@ -77,7 +77,7 @@ if(isset($_GET['url']) && !empty($_GET['url'])) {
     #Resultats en JSON
     $results = array(
         "ndd" => "<span class=\"label label-info\">" . $url . "</span>",
-        "url" => (empty($info["url"])) ? "<span class=\"label label-danger\">Error : " . curl_errno($curl) . " - " . curl_strerror(curl_errno($curl)) . "</span>" : "<a href=\"" . $info["url"] . "\" target=\"_blank\">" . $info["url"]  . "</a>",
+        "url" => (empty($info["url"])) ? "<span class=\"label label-danger\">Error : " . curl_strerror(curl_errno($curl)) . "</span>" : "<a href=\"" . $info["url"] . "\" target=\"_blank\">" . $info["url"]  . "</a>",
         "ttfb" => $ttfb,
         "host" => $host,
         "dns" => $dns,
