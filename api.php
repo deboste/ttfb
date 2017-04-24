@@ -40,12 +40,14 @@ if(isset($_GET['url'])) {
     $output = strtok($output, "\n");
     $nsttl=explode(":", $string);
 
+    #NS
     $authnsndd = array("as44099", "clara", "artful", "claradns", "claradns", "typhon");
     $dns = "-";
     if(!empty($nsttl)) {
-        $dns = "<span class=\"label label-warning\">$nsttl[0]</span>";
         if (count(array_intersect($nsttl, $authnsndd)) > 0){
             $dns = "<span class=\"label label-success\">$nsttl[0]</span>";
+        } else {
+            $dns = "<span class=\"label label-warning\">$nsttl[0]</span>";
         }
     }
 
