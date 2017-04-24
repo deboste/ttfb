@@ -33,44 +33,31 @@ if(isset($_GET['url'])) {
         }
     }
 
-    #NS / TTL
-    $output = shell_exec('script.sh $1');
-    echo "<pre>$output</pre>";
-
-    #NameServer et TimeToLive
     $url = (empty($info["url"])) ? $url : parse_url($info["url"], PHP_URL_HOST);
-    $authns_array = dns_get_record($url, DNS_A + DNS_NS);
 
-    #NS
-    $nstargets = array_column($authns_array, 'target');
-    $authnsndd = array("ns1.as44099.net", "ns2.as44099.net", "ns0.de.clara.net", "ns1.de.clara.net", "ns1.artful.net", "ns2.artful.net", "ns3.artful.net", "ns1.fr.claradns.net", "ns2.fr.claradns.net", "ns3.fr.claradns.net", "ns1.typhon.net", "ns2.typhon.net");
+    #NS / TTL
+    $output = shell_exec("/var/www/ttfb/script.sh $url");
+    $output = strtok($output, "\n");
+    $nsttl=explode(":", $string);
+
+    $authnsndd = array("as44099", "clara", "artful", "claradns", "claradns", "typhon");
     $dns = "-";
-    if(!empty($nstargets)) {
-        $dns = "<span class=\"label label-warning\" title=\"" . implode(", ", $nstargets) . "\">Autre</span>";
-        if (count(array_intersect($nstargets, $authnsndd)) > 0){
-            $dns = "<span class=\"label label-success\" title=\"" . implode(", ", $nstargets) . "\">Claranet</span>";
-        }
-    } else {
-        $authns_array = dns_get_record($_GET['url'], DNS_NS);
-        $nstargets = array_column($authns_array, 'target');
-        if(!empty($nstargets)) {
-            $dns = "<span class=\"label label-warning\" title=\"" . implode(", ", $nstargets) . "\">Autre</span>";
-            if (count(array_intersect($nstargets, $authnsndd)) > 0) {
-                $dns = "<span class=\"label label-success\" title=\"" . implode(", ", $nstargets) . "\">Claranet</span>";
-            }
+    if(!empty($nsttl)) {
+        $dns = "<span class=\"label label-warning\">$nsttl[0]</span>";
+        if (count(array_intersect($nsttl, $authnsndd)) > 0){
+            $dns = "<span class=\"label label-success\">$nsttl[0]</span>";
         }
     }
 
     #TTL
-    $nsttl = array_column($authns_array, 'ttl');
     $ttl = "-";
-    if(!empty($nsttl[0])) {
-        if ($nsttl[0] < 1800 ) {
-            $ttl = "<span class=\"label label-danger\">" . $nsttl[0] . "</span>";
+    if(!empty($nsttl)) {
+        if ($nsttl[1] < 1800 ) {
+            $ttl = "<span class=\"label label-danger\">" . $nsttl[1] . "</span>";
         } elseif ($info["starttransfer_time"] < 3600 ) {
-            $ttl = "<span class=\"label label-warning\">" . $nsttl[0] . "</span>";
+            $ttl = "<span class=\"label label-warning\">" . $nsttl[1] . "</span>";
         } elseif ($info["starttransfer_time"] >= 3600 ) {
-            $ttl = "<span class=\"label label-success\">" . $nsttl[0] . "</span>";
+            $ttl = "<span class=\"label label-success\">" . $nsttl[1] . "</span>";
         }
     }
 
