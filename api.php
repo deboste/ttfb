@@ -41,7 +41,7 @@ if(isset($_GET['url']) && !empty($_GET['url'])) {
     $nsttl=explode(":", $firstline);
 
     #NS
-    $authnsndd = array("as44099", "clara", "artful", "claradns", "claradns", "typhon");
+    $authnsndd = array("as44099", "clara", "artful", "claradns", "typhon");
     $dns = "-";
     if(!empty($nsttl)) {
         if (count(array_intersect($nsttl, $authnsndd)) > 0){
