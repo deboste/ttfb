@@ -45,17 +45,19 @@ $("#check").click(function(){
 
         var arrayOfLines = $('#ndd').val().split('\n');
         $.each(arrayOfLines, function(index, item) {
-            item.replace(/\s/g,'');
-            $.ajax({
-                type: "GET",
-                url: "api.php",
-                data: {
-                    url: item
-                },
-                success: function(results) {
-                    table.row.add(results).draw( false );
-                }
-            });
+            if (!item.trim()) {
+                item.replace(/\s/g,'');
+                $.ajax({
+                    type: "GET",
+                    url: "api.php",
+                    data: {
+                        url: item
+                    },
+                    success: function(results) {
+                        table.row.add(results).draw( false );
+                    }
+                });
+            }
         });
     }
 });
