@@ -24,7 +24,7 @@ if(isset($_GET['url'])) {
     #TTFB
     $ttfb = "-";
     if (!empty($info["starttransfer_time"])) {
-        if ($info["starttransfer_time"] > 0.050 ) {
+        if ($info["starttransfer_time"] > 0.030 ) {
             $ttfb = "<span class=\"label label-danger\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
         } elseif ($info["starttransfer_time"] > 0.020 ) {
             $ttfb = "<span class=\"label label-warning\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";

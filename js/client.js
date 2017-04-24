@@ -42,8 +42,9 @@ $("#reset").click(function(){
 $("#check").click(function(){
     if ($.trim($("#ndd").val())) {
         table.clear().draw();
-
-        var arrayOfLines = $('#ndd').val().split('\n');
+        nddList = $('#ndd').val();
+        nddList = nddList.replace(/(?:(?:\r\n|\r|\n)\s*){2}/gm, "");
+        var arrayOfLines = nddList.split('\n');
         $.each(arrayOfLines, function(index, item) {
             item.replace(/\s/g,'');
             $.ajax({
