@@ -1,5 +1,5 @@
 <?php
-if(isset($_GET['url'])) {
+if(isset($_GET['url']) && !empty($_GET['url'])) {
     $url = $_GET['url'];
     $url = preg_replace('/\s+/', '', $url);
     $results = array();
@@ -86,4 +86,6 @@ if(isset($_GET['url'])) {
 
     header('Content-type: application/json');
     echo json_encode($results);
+} else {
+    header("HTTP/1.0 404 Not Found");
 }
