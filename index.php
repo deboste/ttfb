@@ -29,10 +29,10 @@
         <tr>
             <th>ndd</th>
             <th>url</th>
-            <th>ttfb</th>
+            <th>ttfb (ms)</th>
             <th>host</th>
             <th>dns</th>
-            <th>ttl</th>
+            <th>ttl (s)</th>
         </tr>
         </thead>
         <tbody>

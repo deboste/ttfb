@@ -25,12 +25,13 @@ if(isset($_GET['url']) && !empty($_GET['url'])) {
     #TTFB
     $ttfb = "-";
     if (!empty($info["starttransfer_time"])) {
-        if ($info["starttransfer_time"] > 0.030 ) {
-            $ttfb = "<span class=\"label label-danger\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
-        } elseif ($info["starttransfer_time"] > 0.020 ) {
-            $ttfb = "<span class=\"label label-warning\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
-        } elseif ($info["starttransfer_time"] > 0.000 ) {
-            $ttfb = "<span class=\"label label-success\" title=\"namelookup_time : " . $info["namelookup_time"] . " / starttransfer_time : " . $info["starttransfer_time"] . "\">" . $info["starttransfer_time"] . "</span>";
+        $time = floor($info["starttransfer_time"] * 1000);
+        if ($time > 30 ) {
+            $ttfb = "<span class=\"label label-danger\" title=\"namelookup_time : " . $info["namelookup_time"] . " s / starttransfer_time : " . $info["starttransfer_time"] . " s\">" . $time . "</span>";
+        } elseif ($time > 20 ) {
+            $ttfb = "<span class=\"label label-warning\" title=\"namelookup_time : " . $info["namelookup_time"] . " s / starttransfer_time : " . $info["starttransfer_time"] . " s\">" . $time . "</span>";
+        } elseif ($time > 0 ) {
+            $ttfb = "<span class=\"label label-success\" title=\"namelookup_time : " . $info["namelookup_time"] . " s / starttransfer_time : " . $info["starttransfer_time"] . " s\">" . $time . "</span>";
         }
     }
 
@@ -79,10 +80,10 @@ if(isset($_GET['url']) && !empty($_GET['url'])) {
     $results = array(
         "ndd" => "<span class=\"label label-info\">" . $url . "</span>",
         "url" => (empty($info["url"])) ? "<span class=\"label label-danger\">Error : " . curl_strerror(curl_errno($curl)) . "</span>" : "<a href=\"" . $info["url"] . "\" target=\"_blank\">" . $info["url"]  . "</a>",
-        "ttfb" => $ttfb,
+        "ttfb (ms)" => $ttfb,
         "host" => $host,
         "dns" => $dns,
-        "ttl" => $ttl
+        "ttl (s)" => $ttl
     );
 
     header('Content-type: application/json');

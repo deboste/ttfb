@@ -3,10 +3,10 @@ $( document ).ready(function() {
         columns: [
             { "data": "ndd" },
             { "data": "url" },
-            { "data": "ttfb" },
+            { "data": "ttfb (ms)" },
             { "data": "host" },
             { "data": "dns" },
-            { "data": "ttl" }
+            { "data": "ttl (s)" }
         ],
         paging: true,
         order: [[ 2, "asc" ]],
