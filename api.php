@@ -1,6 +1,7 @@
 <?php
 if(isset($_GET['url']) && !empty($_GET['url'])) {
     $url = $_GET['url'];
+    $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
     $url = preg_replace('/\s+/', '', $url);
     $results = array();
 
