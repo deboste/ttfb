@@ -38,7 +38,7 @@ if(isset($_GET['url']) && !empty($_GET['url'])) {
     $url = (empty($info["url"])) ? $url : parse_url($info["url"], PHP_URL_HOST);
 
     #NS / TTL
-    $output = shell_exec("/var/www/ttfb/script.sh $url");
+    $output = shell_exec("./script.sh $url");
     $firstline = strtok($output, "\n");
     $nsttl=explode(":", $firstline);
 
